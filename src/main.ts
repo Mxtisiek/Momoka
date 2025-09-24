@@ -19,16 +19,10 @@ const client = new Client({
 });
 //
 
-// Ready message
-client.on("clientReady", (c: { user: { tag: any; }; }) => {
-    console.log(`[STATUS] ${c.user.tag} ready to rock! [+]`);
-});
-//
-
 // Load command files
 client.commands = new Collection();
 
-const foldersPath = path.join(__dirname, 'commands');
+const foldersPath = path.join(__dirname, "commands");
 const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
@@ -41,34 +35,25 @@ for (const folder of commandFolders) {
 		if ("data" in command && "execute" in command) {
 			client.commands.set(command.data.name, command);
 		} else {
-			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property. [-]`);
 		}
 	}
 }
 //
 
-// Events
-client.on(Events.InteractionCreate, async (interaction: BaseInteraction) => {
-	if (!interaction.isChatInputCommand()) return;
+// Load event files
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter((file: string) => file.endsWith(".ts"));
 
-    const command = interaction.client.commands.get(interaction.commandName);
-
-	if (!command) {
-		console.error(`No command matching ${interaction.commandName} was found.`);
-		return;
+for (const file of eventFiles) {
+	const filePath = path.join(eventsPath, file);
+	const event = require(filePath);
+	if (event.once) {
+		client.once(event.name, (...args: any) => event.execute(...args));
+	} else {
+		client.on(event.name, (...args: any) => event.execute(...args));
 	}
-
-	try {
-		await command.execute(interaction);
-	} catch (error) {
-		console.error(error);
-		if (interaction.replied || interaction.deferred) {
-			await interaction.followUp({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
-		} else {
-			await interaction.reply({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
-		}
-	}
-});
+}
 //
 
 // Start the bot and log into Discord
