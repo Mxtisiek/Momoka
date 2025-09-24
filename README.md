@@ -1,15 +1,16 @@
-# nijika
+# Momoka
+### A simple Discord bot with SurrealDB integration for testing purposes
 
-To install dependencies:
+Utilizes the Bun runtime with TypeScript, Discord.js and SurrealDB.
 
+Install dependencies:
 ```bash
 bun install
 ```
 
-To run:
-
+Run the bot:
 ```bash
-bun run index.ts
+bun src/main.ts
 ```
 
-This project was created using `bun init` in bun v1.2.22. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+*Database currently not functional*
