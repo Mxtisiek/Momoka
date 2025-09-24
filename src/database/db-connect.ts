@@ -11,11 +11,11 @@ interface DbConfig {
 
 // Default database config
 const DEFAULT_CONFIG: DbConfig = {
-    url: "wss://surreal-tests-06c7n3s9ttp6nesdmbi3pfcc04.aws-euw1.surreal.cloud",
-    namespace: "Main",
-    database: "Bot",
-    username: "bot",
-    password: process.env.DATABASE_PASSWORD!
+    url: process.env.DB_URL!,
+    namespace: process.env.DB_NAMESPACE!,
+    database: process.env.DB_DATABASE!,
+    username: process.env.DB_USER!,
+    password: process.env.DB_PASSWORD!
 };
 
 // Get the database

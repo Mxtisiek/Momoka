@@ -1,4 +1,4 @@
-import { getDb } from "./surreal.ts";
+import { getDb } from "./db-connect.ts";
 import { jsonify } from "surrealdb";
 
 interface User {
