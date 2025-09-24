@@ -1,8 +1,7 @@
 # Momoka (河原木 桃香, from *Girls Band Cry*)
-##### The name choice makes no sense and isn't supposed to, I just like Momoka
+###### The name choice makes no sense and isn't supposed to, I just like Momoka
 
-### A simple Discord bot with SurrealDB integration for testing purposes
-
+### A simple Discord bot with SurrealDB integration, for testing purposes.
 
 Utilizes the Bun runtime with **TypeScript**, **Discord.js** and **SurrealDB**.
 
@@ -40,5 +39,3 @@ bun src/main.ts
 ```
 
 ***Database currently not functional***
-
-
