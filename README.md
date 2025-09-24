@@ -1,5 +1,9 @@
-<span style="color:red"> # Momoka (河原木 桃香, from *Girls Band Cry*) </span>
-<span style="color:gray"><small> The name choice makes no sense and isn't supposed to, I just like Momoka </small></span>
+<span style="color:red">
+# Momoka (河原木 桃香, from *Girls Band Cry*)
+</span>
+<span style="color:gray"><small>
+The name choice makes no sense and isn't supposed to, I just like Momoka
+</small></span>
 ### A simple Discord bot with SurrealDB integration for testing purposes
 
 Utilizes the Bun runtime with **TypeScript**, **Discord.js** and **SurrealDB**.
