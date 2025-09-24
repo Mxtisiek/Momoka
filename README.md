@@ -8,6 +8,29 @@ Install dependencies:
 bun install
 ```
 
+Requires a .env file:
+```env
+# Discord / data from the Discord Developer Portal of your bot
+DISCORD_TOKEN=""
+
+APP_ID=""
+
+GUILD_ID=""
+#
+
+# SurrealDB / self-explanatory
+DB_URL=""
+
+DB_NAMESPACE=""
+
+DB_DATABASE=""
+
+DB_USER=""
+
+DB_PASSWORD=""
+#
+```
+
 Run the bot:
 ```bash
 bun src/main.ts
