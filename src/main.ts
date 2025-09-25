@@ -1,61 +1,50 @@
-const fs = require('bun:fs');
-const path = require('bun:path');
-import { Collection, type BaseInteraction } from "discord.js";
-const { Client, IntentsBitField, Events, MessageFlags } = require("discord.js");
+import { IntentsBitField } from "discord.js";
+import { Client } from "discordx";
+import { dirname, importx } from "@discordx/importer";
 
 // Environment variables
-const token = process.env.DISCORD_TOKEN;
-const appId = process.env.APP_ID;
-const guildId = process.env.GUILD_ID;
+if (!process.env.DISCORD_TOKEN) { throw Error("DISCORD_TOKEN not found!"); }
+const token: string = process.env.DISCORD_TOKEN;
+if (!process.env.GUILD_ID) { throw Error("GUILD_ID not found!"); }
+const guildId: string = process.env.GUILD_ID;
 //
 
-// Instantiate client and set intents
-const client = new Client({
-    intents: [
-        IntentsBitField.Flags.Guilds,
-        IntentsBitField.Flags.GuildMembers,
-        IntentsBitField.Flags.MessageContent,
-    ]
-});
-//
+export class Main {
+	private static _client: Client
 
-// Load command files
-client.commands = new Collection();
+	static get Client(): Client {
+    	return this._client;
+  	}
 
-const foldersPath = path.join(__dirname, "commands");
-const commandFolders = fs.readdirSync(foldersPath);
+	static async start(): Promise<void> {
+    this._client = new Client({
+      	// botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
+    	intents: [
+			IntentsBitField.Flags.Guilds,
+			IntentsBitField.Flags.GuildMessages,
+			IntentsBitField.Flags.GuildMembers,
+      	],
+      	silent: false,
+    });
 
-for (const folder of commandFolders) {
-	const commandsPath = path.join(foldersPath, folder);
-	const commandFiles = fs.readdirSync(commandsPath).filter((file: string) => file.endsWith(".ts"));
-	for (const file of commandFiles) {
-		const filePath = path.join(commandsPath, file);
-		const command = require(filePath);
-		// Set a new item in the Collection with the key as the command name and the value as the exported module
-		if ("data" in command && "execute" in command) {
-			client.commands.set(command.data.name, command);
-		} else {
-			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property. [-]`);
-		}
-	}
+    this._client.once("clientReady", async () => {
+		await this._client.clearApplicationCommands(
+		   ...this._client.guilds.cache.map((guild) => guild.id)
+		);
+
+		void this._client.initApplicationCommands();
+
+		console.log("Momoka >> ready to rock!");
+    });
+
+    this._client.on("interactionCreate", (interaction) => {
+      	this._client.executeInteraction(interaction);
+    });
+
+    await importx(`${dirname(import.meta.url)}/commands/**/*.ts`);
+
+    await this._client.login(token);
+  }
 }
-//
 
-// Load event files
-const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter((file: string) => file.endsWith(".ts"));
-
-for (const file of eventFiles) {
-	const filePath = path.join(eventsPath, file);
-	const event = require(filePath);
-	if (event.once) {
-		client.once(event.name, (...args: any) => event.execute(...args));
-	} else {
-		client.on(event.name, (...args: any) => event.execute(...args));
-	}
-}
-//
-
-// Start the bot and log into Discord
-client.login(token);
-//
+void Main.start();

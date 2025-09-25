@@ -8,6 +8,7 @@ interface DbConfig {
     username: string;
     password: string;
 }
+//
 
 // Default database config
 const DEFAULT_CONFIG: DbConfig = {
@@ -17,24 +18,25 @@ const DEFAULT_CONFIG: DbConfig = {
     username: process.env.DB_USER!,
     password: process.env.DB_PASSWORD!
 };
+//
 
 // Get the database
 export async function getDb(config: DbConfig = DEFAULT_CONFIG): Promise<Surreal> {
     const db = new Surreal();
 
     try {
-        await db.connect(config.url, {
+        await db.connect(config.url);
+        await db.signin({
             namespace: config.namespace,
             database: config.database,
-            auth: {
-                username: config.username,
-                password: config.password
-	        }
+            username: config.username,
+            password: config.password
         });
         return db;
-    } catch (err) {
-        console.error("Failed to connect to SurrealDB:", err instanceof Error ? err.message : String(err));
+    } catch (error) {
+        console.error(`${error}`);
+        console.log(`Surreal !> Failed to connect to the database: ${error}`);
         await db.close();
-        throw err;
+        throw error;
     }
 }

@@ -3,7 +3,7 @@
 
 ### A simple Discord bot with SurrealDB integration, for testing purposes.
 
-Utilizes the Bun runtime with **TypeScript**, **Discord.js** and **SurrealDB**.
+Utilizes the **Bun** runtime with **TypeScript**, **Discord.js** and **SurrealDB**.
 
 Install dependencies:
 ```bash
