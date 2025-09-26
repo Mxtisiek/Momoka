@@ -1,7 +1,7 @@
-import { ApplicationCommandOptionType, type CommandInteraction } from "discord.js";
+import type { CommandInteraction } from "discord.js";
 import { Discord, Slash, SlashGroup, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";
-import { getDb } from "../surreal";
+import { getDb } from "../../surreal";
 
 @Discord()
 @Category("Database Commands")
@@ -24,19 +24,4 @@ export class Database {
     }
 }
 
-@Discord()
-@SlashGroup("database")
-export class Create {
-    @Slash({ description: "Create a new database record", name: "create" })
-    async create(
-        
-    ) {
 
-
-        try {
-            
-        } catch (e) {
-            
-        }
-    }
-}
